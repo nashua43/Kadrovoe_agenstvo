@@ -1,0 +1,1070 @@
+"""
+Кадровое агентство
+Простая программа для управления базой данных соискателей
+"""
+
+# Здесь будет храниться наша база данных
+applicants = []
+
+
+def load_data():
+    """Загружает данные из файла в программу"""
+    global applicants
+
+    print("Пытаюсь загрузить данные из файла...")
+
+    try:
+        # Открываем файл для чтения
+        file = open("applicants.txt", "r", encoding="utf-8")
+        lines = file.readlines()
+        file.close()
+
+        # Очищаем старую базу
+        applicants = []
+
+        # Читаем каждую строку (кроме заголовка)
+        for i in range(1, len(lines)):
+            line = lines[i].strip()
+            if line:  # если строка не пустая
+                parts = line.split(";")
+
+                # Создаем запись о соискателе
+                applicant = {
+                    "id": int(parts[0]),
+                    "last_name": parts[1],
+                    "first_name": parts[2],
+                    "patronymic": parts[3],
+                    "gender": parts[4],
+                    "birth_year": int(parts[5]),
+                    "birth_month": int(parts[6]),
+                    "birth_day": int(parts[7]),
+                    "specialty": parts[8],
+                    "experience": float(parts[9]),
+                    "languages": parts[10],
+                    "expected_salary": int(parts[11])
+                }
+
+                applicants.append(applicant)
+
+        print(f"Успешно загружено {len(applicants)} записей")
+
+    except FileNotFoundError:
+        print("Файл не найден. Создаю тестовые данные...")
+        create_test_data()
+    except:
+        print("Ошибка при загрузке файла. Создаю тестовые данные...")
+        create_test_data()
+
+
+def save_data():
+    """Сохраняет данные из программы в файл"""
+    print("Сохраняю данные в файл...")
+
+    try:
+        # Открываем файл для записи
+        file = open("applicants.txt", "w", encoding="utf-8")
+
+        # Пишем заголовок
+        file.write("id;фамилия;имя;отчество;пол;год;месяц;день;специальность;стаж;языки;оклад\n")
+
+        # Пишем каждую запись
+        for applicant in applicants:
+            line = f"{applicant['id']};{applicant['last_name']};{applicant['first_name']};"
+            line += f"{applicant['patronymic']};{applicant['gender']};{applicant['birth_year']};"
+            line += f"{applicant['birth_month']};{applicant['birth_day']};"
+            line += f"{applicant['specialty']};{applicant['experience']};"
+            line += f"{applicant['languages']};{applicant['expected_salary']}\n"
+
+            file.write(line)
+
+        file.close()
+        print("Данные успешно сохранены!")
+
+    except:
+        print("Ошибка при сохранении файла")
+
+
+def create_test_data():
+    """Создает 25 тестовых записей для демонстрации"""
+    global applicants
+
+    print("Создаю 25 тестовых записей...")
+
+    # Очищаем базу
+    applicants = []
+
+    # Список тестовых данных
+    test_data = [
+        # id, фамилия, имя, отчество, пол, год, месяц, день, специальность, стаж, языки, оклад
+        [1, "Иванов", "Иван", "Иванович", "М", 1990, 5, 15, "Программист", 5.5, "Английский", 120000],
+        [2, "Петрова", "Анна", "Сергеевна", "Ж", 1988, 3, 22, "Программист", 7.0, "Английский, Немецкий", 150000],
+        [3, "Сидоров", "Алексей", "Петрович", "М", 1995, 8, 10, "Дизайнер", 3.0, "Английский", 90000],
+        [4, "Кузнецова", "Елена", "Владимировна", "Ж", 1992, 11, 30, "Дизайнер", 4.5, "Английский, Французский",
+         110000],
+        [5, "Смирнов", "Дмитрий", "Александрович", "М", 1985, 2, 14, "Менеджер", 10.0, "Английский", 140000],
+        [6, "Волкова", "Ольга", "Игоревна", "Ж", 1990, 7, 18, "Менеджер", 8.5, "Английский, Испанский", 130000],
+        [7, "Васильева", "Мария", "Андреевна", "Ж", 1993, 4, 25, "Аналитик", 4.0, "Английский", 100000],
+        [8, "Федоров", "Андрей", "Николаевич", "М", 1991, 12, 3, "Аналитик", 5.0, "Английский, Китайский", 115000],
+        [9, "Новиков", "Павел", "Олегович", "М", 1994, 1, 8, "Дизайнер", 3.5, "Английский", 85000],
+        [10, "Андреева", "Юлия", "Павловна", "Ж", 1996, 10, 12, "Дизайнер", 2.0, "Английский, Итальянский", 75000],
+        [11, "Козлов", "Максим", "Сергеевич", "М", 1992, 3, 19, "Тестировщик", 4.5, "Английский", 80000],
+        [12, "Лебедева", "Ирина", "Анатольевна", "Ж", 1988, 8, 21, "Тестировщик", 6.0, "Английский, Французский",
+         95000],
+        [13, "Семенов", "Артем", "Владимирович", "М", 1986, 2, 28, "Программист", 8.0, "Английский", 160000],
+        [14, "Павлов", "Кирилл", "Игоревич", "М", 1993, 7, 14, "Маркетолог", 4.0, "Английский", 85000],
+        [15, "Абрамов", "Виктор", "Степанович", "М", 1978, 4, 2, "Водитель", 15.0, "-", 60000],
+        [16, "Александрова", "Галина", "Петровна", "Ж", 1980, 11, 15, "Водитель", 12.0, "-", 55000],
+        [17, "Борисов", "Игорь", "Васильевич", "М", 1995, 6, 30, "Курьер", 2.0, "-", 40000],
+        [18, "Антонов", "Михаил", "Юрьевич", "М", 1989, 10, 8, "Администратор", 9.0, "Английский", 110000],
+        [19, "Яковлев", "Роман", "Аркадьевич", "М", 1987, 3, 17, "Программист", 8.5, "Английский", 145000],
+        [20, "Морозов", "Сергей", "Викторович", "М", 1990, 9, 5, "Менеджер", 6.0, "Английский", 95000],
+        [21, "Тихонова", "Екатерина", "Романовна", "Ж", 1992, 12, 24, "Администратор", 6.5, "Английский, Польский",
+         105000],
+        [22, "Григорьева", "Светлана", "Олеговна", "Ж", 1991, 9, 26, "Маркетолог", 5.5, "Английский, Немецкий", 95000],
+        [23, "Данилова", "Людмила", "Алексеевна", "Ж", 1998, 2, 11, "Курьер", 1.0, "-", 35000],
+        [24, "Егорова", "Наталья", "Викторовна", "Ж", 1990, 5, 7, "Программист", 5.5, "Английский, Испанский", 140000],
+        [25, "Попов", "Александр", "Дмитриевич", "М", 1993, 11, 19, "Аналитик", 7.5, "Английский, Немецкий", 135000]
+    ]
+
+    # Добавляем каждую запись в базу
+    for record in test_data:
+        applicant = {
+            "id": record[0],
+            "last_name": record[1],
+            "first_name": record[2],
+            "patronymic": record[3],
+            "gender": record[4],
+            "birth_year": record[5],
+            "birth_month": record[6],
+            "birth_day": record[7],
+            "specialty": record[8],
+            "experience": record[9],
+            "languages": record[10],
+            "expected_salary": record[11]
+        }
+        applicants.append(applicant)
+
+    print(f"Создано {len(applicants)} тестовых записей")
+    save_data()
+
+
+def show_all():
+    """Показывает всех соискателей в базе"""
+    if not applicants:
+        print("База данных пуста!")
+        return
+
+    print("\n" + "=" * 120)
+    print("ВСЕ СОИСКАТЕЛИ В БАЗЕ ДАННЫХ")
+    print("=" * 120)
+
+    # Заголовок таблицы
+    print(f"{'ID':<4} {'ФИО':<30} {'Пол':<4} {'Дата рождения':<12} "
+          f"{'Специальность':<20} {'Стаж':<6} {'Языки':<20} {'Оклад':<10}")
+    print("-" * 120)
+
+    # Данные
+    for applicant in applicants:
+        date = f"{applicant['birth_day']:02d}.{applicant['birth_month']:02d}.{applicant['birth_year']}"
+        full_name = f"{applicant['last_name']} {applicant['first_name'][0]}.{applicant['patronymic'][0]}."
+
+        print(f"{applicant['id']:<4} {full_name:<30} {applicant['gender']:<4} {date:<12} "
+              f"{applicant['specialty']:<20} {applicant['experience']:<6.1f} "
+              f"{applicant['languages']:<20} {applicant['expected_salary']:<10}")
+
+    print("=" * 120)
+    print(f"Всего записей: {len(applicants)}")
+
+
+def shaker_sort(data, key1, direction1, key2=None, direction2=None, key3=None, direction3=None):
+    """
+    Выполняет шейкерную сортировку списка.
+
+    Аргументы:
+    - data: что сортируем
+    - key1: первое поле для сортировки
+    - direction1: True - по убыванию, False - по возрастанию
+    - key2, key3: дополнительные ключи сортировки
+    """
+    # Если список пустой или содержит 1 элемент, возвращаем копию
+    if len(data) <= 1:
+        return data.copy()
+
+    # Создаем копию для сортировки
+    result = data.copy()
+    n = len(result)
+    swapped = True
+    left = 0
+    right = n - 1
+
+    while swapped:
+        swapped = False
+
+        # Проход слева направо
+        for i in range(left, right):
+            need_swap = False
+
+            # Сравниваем по первому ключу
+            if result[i][key1] > result[i + 1][key1]:
+                need_swap = True
+            elif result[i][key1] == result[i + 1][key1] and key2:
+                # Если равны по первому ключу, сравниваем по второму
+                if result[i][key2] > result[i + 1][key2]:
+                    need_swap = True
+                elif result[i][key2] == result[i + 1][key2] and key3:
+                    # Если равны и по второму ключу, сравниваем по третьему
+                    if result[i][key3] > result[i + 1][key3]:
+                        need_swap = True
+
+            # Учитываем направление сортировки
+            if direction1:  # если сортируем по убыванию
+                if result[i][key1] < result[i + 1][key1]:
+                    need_swap = True
+
+            if need_swap:
+                # Меняем местами
+                result[i], result[i + 1] = result[i + 1], result[i]
+                swapped = True
+
+        if not swapped:
+            break
+
+        # Сужаем диапазон справа
+        right -= 1
+
+        # Проход справа налево
+        for i in range(right - 1, left - 1, -1):
+            need_swap = False
+
+            if result[i][key1] > result[i + 1][key1]:
+                need_swap = True
+            elif result[i][key1] == result[i + 1][key1] and key2:
+                if result[i][key2] > result[i + 1][key2]:
+                    need_swap = True
+                elif result[i][key2] == result[i + 1][key2] and key3:
+                    if result[i][key3] > result[i + 1][key3]:
+                        need_swap = True
+
+            if direction1:
+                if result[i][key1] < result[i + 1][key1]:
+                    need_swap = True
+
+            if need_swap:
+                result[i], result[i + 1] = result[i + 1], result[i]
+                swapped = True
+
+        # Расширяем диапазон слева
+        left += 1
+
+    return result
+
+
+def report_1():
+    """Отчет 1: полный список, отсортированный по специальности и фамилии"""
+    print("\n" + "=" * 60)
+    print("ОТЧЕТ 1: ПОЛНЫЙ СПИСОК СОИСКАТЕЛЕЙ")
+    print("=" * 60)
+    print("Сортировка: специальность (А-Я), фамилия (А-Я)")
+
+    # Сортируем с помощью шейкерной сортировки
+    sorted_list = shaker_sort(
+        applicants,
+        "specialty",  # первый ключ
+        False,  # по возрастанию (А-Я)
+        "last_name",  # второй ключ
+        False  # по возрастанию (А-Я)
+    )
+
+    # Показываем результат
+    if not sorted_list:
+        print("Нет данных для отображения")
+        return
+
+    print("\n" + "=" * 120)
+    print("ОТСОРТИРОВАННЫЙ СПИСОК")
+    print("=" * 120)
+
+    print(f"{'ID':<4} {'ФИО':<30} {'Пол':<4} {'Специальность':<20} {'Стаж':<6} {'Оклад':<10}")
+    print("-" * 120)
+
+    for applicant in sorted_list:
+        full_name = f"{applicant['last_name']} {applicant['first_name'][0]}.{applicant['patronymic'][0]}."
+
+        print(f"{applicant['id']:<4} {full_name:<30} {applicant['gender']:<4} "
+              f"{applicant['specialty']:<20} {applicant['experience']:<6.1f} "
+              f"{applicant['expected_salary']:<10}")
+
+    print("=" * 120)
+    print(f"Всего записей: {len(sorted_list)}")
+
+
+def report_2():
+    """Отчет 2: соискатели заданной специальности"""
+    print("\n" + "=" * 60)
+    print("ОТЧЕТ 2: СОИСКАТЕЛИ ПО СПЕЦИАЛЬНОСТИ")
+    print("=" * 60)
+    print("Сортировка: стаж (больше->меньше), пол (М->Ж), фамилия (А-Я)")
+
+    # Получаем список всех специальностей
+    all_specialties = []
+    for applicant in applicants:
+        if applicant["specialty"] not in all_specialties:
+            all_specialties.append(applicant["specialty"])
+
+    # Сортируем специальности по алфавиту
+    all_specialties.sort()
+
+    if not all_specialties:
+        print("В базе нет записей")
+        return
+
+    # Показываем список специальностей
+    print("\nДоступные специальности:")
+    for i, specialty in enumerate(all_specialties, 1):
+        print(f"{i}. {specialty}")
+
+    # Запрашиваем выбор с проверкой
+    while True:
+        try:
+            choice = input("\nВведите номер специальности (или 0 для отмены): ").strip()
+
+            if choice == "0":
+                print("Операция отменена.")
+                return
+
+            choice = int(choice)
+
+            if choice < 1 or choice > len(all_specialties):
+                print(f"Неверный номер! Введите число от 1 до {len(all_specialties)}")
+                continue
+
+            break
+        except ValueError:
+            print("Ошибка ввода! Введите число.")
+        except:
+            print("Произошла ошибка. Попробуйте еще раз.")
+
+    selected_specialty = all_specialties[choice - 1]
+
+    # Фильтруем соискатели по выбранной специальности
+    filtered = []
+    for applicant in applicants:
+        if applicant["specialty"] == selected_specialty:
+            filtered.append(applicant)
+
+    if not filtered:
+        print(f"\nНет соискателей со специальностью '{selected_specialty}'")
+        return
+
+    # Сортируем отфильтрованный список
+    sorted_list = shaker_sort(
+        filtered,
+        "experience",  # первый ключ - стаж
+        True,  # по убыванию (больше->меньше)
+        "gender",  # второй ключ - пол
+        True,  # по убыванию (М->Ж)
+        "last_name",  # третий ключ - фамилия
+        False  # по возрастанию (А-Я)
+    )
+
+    # Показываем результат
+    print(f"\n" + "=" * 120)
+    print(f"СОИСКАТЕЛИ СПЕЦИАЛЬНОСТИ: {selected_specialty.upper()}")
+    print("=" * 120)
+
+    print(f"{'ID':<4} {'ФИО':<30} {'Пол':<4} {'Стаж':<6} {'Языки':<20} {'Оклад':<10}")
+    print("-" * 120)
+
+    for applicant in sorted_list:
+        full_name = f"{applicant['last_name']} {applicant['first_name'][0]}.{applicant['patronymic'][0]}."
+
+        print(f"{applicant['id']:<4} {full_name:<30} {applicant['gender']:<4} "
+              f"{applicant['experience']:<6.1f} {applicant['languages']:<20} "
+              f"{applicant['expected_salary']:<10}")
+
+    print("=" * 120)
+    print(f"Найдено записей: {len(sorted_list)}")
+
+
+def report_3():
+    """Отчет 3: соискатели с окладом в заданном диапазоне"""
+    print("\n" + "=" * 60)
+    print("ОТЧЕТ 3: СОИСКАТЕЛИ ПО ДИАПАЗОНУ ОКЛАДА")
+    print("=" * 60)
+    print("Сортировка: оклад (больше->меньше), фамилия (А-Я)")
+
+    # Запрашиваем минимальный оклад с проверкой
+    while True:
+        try:
+            min_salary_input = input("Введите минимальный оклад (или 0 для отмены): ").strip()
+
+            if min_salary_input == "0":
+                print("Операция отменена.")
+                return
+
+            min_salary = int(min_salary_input)
+
+            if min_salary < 0:
+                print("Оклад не может быть отрицательным! Попробуйте еще раз.")
+                continue
+
+            break
+        except ValueError:
+            print("Ошибка ввода! Введите целое число.")
+        except:
+            print("Произошла ошибка. Попробуйте еще раз.")
+
+    # Запрашиваем максимальный оклад с проверкой
+    while True:
+        try:
+            max_salary_input = input("Введите максимальный оклад (или 0 для отмены): ").strip()
+
+            if max_salary_input == "0":
+                print("Операция отменена.")
+                return
+
+            max_salary = int(max_salary_input)
+
+            if max_salary < 0:
+                print("Оклад не может быть отрицательным! Попробуйте еще раз.")
+                continue
+
+            if max_salary < min_salary:
+                print(
+                    f"Максимальный оклад ({max_salary}) не может быть меньше минимального ({min_salary})! Попробуйте еще раз.")
+                continue
+
+            break
+        except ValueError:
+            print("Ошибка ввода! Введите целое число.")
+        except:
+            print("Произошла ошибка. Попробуйте еще раз.")
+
+    # Фильтруем соискателей по окладу
+    filtered = []
+    for applicant in applicants:
+        if min_salary <= applicant["expected_salary"] <= max_salary:
+            filtered.append(applicant)
+
+    if not filtered:
+        print(f"\nНет соискателей с окладом от {min_salary} до {max_salary}")
+        return
+
+    # Сортируем отфильтрованный список
+    sorted_list = shaker_sort(
+        filtered,
+        "expected_salary",  # первый ключ - оклад
+        True,  # по убыванию (больше->меньше)
+        "last_name",  # второй ключ - фамилия
+        False  # по возрастанию (А-Я)
+    )
+
+    # Показываем результат
+    print(f"\n" + "=" * 120)
+    print(f"СОИСКАТЕЛИ С ОКЛАДОМ ОТ {min_salary} ДО {max_salary}")
+    print("=" * 120)
+
+    print(f"{'ID':<4} {'ФИО':<30} {'Пол':<4} {'Специальность':<20} {'Стаж':<6} {'Оклад':<10}")
+    print("-" * 120)
+
+    for applicant in sorted_list:
+        full_name = f"{applicant['last_name']} {applicant['first_name'][0]}.{applicant['patronymic'][0]}."
+
+        print(f"{applicant['id']:<4} {full_name:<30} {applicant['gender']:<4} "
+              f"{applicant['specialty']:<20} {applicant['experience']:<6.1f} "
+              f"{applicant['expected_salary']:<10}")
+
+    print("=" * 120)
+    print(f"Найдено записей: {len(sorted_list)}")
+
+
+def add_applicant():
+    """Добавляет нового соискателя в базу"""
+    print("\n" + "=" * 60)
+    print("ДОБАВЛЕНИЕ НОВОГО СОИСКАТЕЛЯ")
+    print("=" * 60)
+
+    # Находим максимальный ID
+    max_id = 0
+    for applicant in applicants:
+        if applicant["id"] > max_id:
+            max_id = applicant["id"]
+
+    new_id = max_id + 1
+
+    print(f"ID нового соискателя: {new_id}")
+    print("\nЗаполните данные о соискателе:")
+    print("=" * 40)
+
+    # Запрашиваем фамилию с проверкой
+    while True:
+        last_name = input("Фамилия: ").strip()
+        if not last_name:
+            print("Фамилия не может быть пустой! Попробуйте еще раз.")
+            continue
+
+        # Проверяем, что в фамилии только буквы и дефисы
+        if not all(c.isalpha() or c == '-' for c in last_name):
+            print("Фамилия должна содержать только буквы и дефисы! Попробуйте еще раз.")
+            continue
+
+        break
+
+    # Запрашиваем имя с проверкой
+    while True:
+        first_name = input("Имя: ").strip()
+        if not first_name:
+            print("Имя не может быть пустым! Попробуйте еще раз.")
+            continue
+
+        if not all(c.isalpha() or c == '-' for c in first_name):
+            print("Имя должно содержать только буквы и дефисы! Попробуйте еще раз.")
+            continue
+
+        break
+
+    # Запрашиваем отчество с проверкой
+    while True:
+        patronymic = input("Отчество: ").strip()
+        if not patronymic:
+            print("Отчество не может быть пустым! Попробуйте еще раз.")
+            continue
+
+        if not all(c.isalpha() or c == '-' for c in patronymic):
+            print("Отчество должно содержать только буквы и дефисы! Попробуйте еще раз.")
+            continue
+
+        break
+
+    # Запрашиваем пол с проверкой
+    while True:
+        gender = input("Пол (М или Ж): ").strip().upper()
+        if gender not in ["М", "Ж"]:
+            print("Пол должен быть 'М' или 'Ж'! Попробуйте еще раз.")
+            continue
+        break
+
+    # Запрашиваем год рождения с проверкой
+    while True:
+        try:
+            year_input = input("Год рождения (1900-2024): ").strip()
+            year = int(year_input)
+
+            if year < 1900 or year > 2024:
+                print("Год должен быть между 1900 и 2024! Попробуйте еще раз.")
+                continue
+
+            break
+        except ValueError:
+            print("Ошибка ввода! Введите число.")
+        except:
+            print("Произошла ошибка. Попробуйте еще раз.")
+
+    # Запрашиваем месяц рождения с проверкой
+    while True:
+        try:
+            month_input = input("Месяц рождения (1-12): ").strip()
+            month = int(month_input)
+
+            if month < 1 or month > 12:
+                print("Месяц должен быть от 1 до 12! Попробуйте еще раз.")
+                continue
+
+            break
+        except ValueError:
+            print("Ошибка ввода! Введите число.")
+        except:
+            print("Произошла ошибка. Попробуйте еще раз.")
+
+    # Запрашиваем день рождения с проверкой
+    while True:
+        try:
+            day_input = input("День рождения (1-31): ").strip()
+            day = int(day_input)
+
+            if day < 1 or day > 31:
+                print("День должен быть от 1 до 31! Попробуйте еще раз.")
+                continue
+
+            # Проверка для февраля (упрощенная)
+            if month == 2 and day > 29:
+                print("В феврале не может быть больше 29 дней! Попробуйте еще раз.")
+                continue
+
+            # Проверка для месяцев с 30 днями
+            if month in [4, 6, 9, 11] and day > 30:
+                print(f"В {month}-м месяце не может быть больше 30 дней! Попробуйте еще раз.")
+                continue
+
+            break
+        except ValueError:
+            print("Ошибка ввода! Введите число.")
+        except:
+            print("Произошла ошибка. Попробуйте еще раз.")
+
+    # Запрашиваем специальность с проверкой
+    while True:
+        specialty = input("Специальность: ").strip()
+        if not specialty:
+            print("Специальность не может быть пустой! Попробуйте еще раз.")
+            continue
+        break
+
+    # Запрашиваем стаж с проверкой
+    while True:
+        try:
+            experience_input = input("Стаж работы (лет, 0-60): ").strip()
+            experience = float(experience_input)
+
+            if experience < 0 or experience > 60:
+                print("Стаж должен быть в диапазоне 0-60 лет! Попробуйте еще раз.")
+                continue
+
+            break
+        except ValueError:
+            print("Ошибка ввода! Введите число (можно с дробной частью).")
+        except:
+            print("Произошла ошибка. Попробуйте еще раз.")
+
+    # Запрашиваем языки
+    languages = input("Иностранные языки (через запятую, Enter если нет): ").strip()
+    if not languages:
+        languages = "-"
+
+    # Запрашиваем оклад с проверкой
+    while True:
+        try:
+            salary_input = input("Ожидаемый оклад (руб., минимум 10000): ").strip()
+            salary = int(salary_input)
+
+            if salary < 10000:
+                print("Оклад должен быть не менее 10000 руб.! Попробуйте еще раз.")
+                continue
+
+            break
+        except ValueError:
+            print("Ошибка ввода! Введите целое число.")
+        except:
+            print("Произошла ошибка. Попробуйте еще раз.")
+
+    # Создаем новую запись
+    new_applicant = {
+        "id": new_id,
+        "last_name": last_name,
+        "first_name": first_name,
+        "patronymic": patronymic,
+        "gender": gender,
+        "birth_year": year,
+        "birth_month": month,
+        "birth_day": day,
+        "specialty": specialty,
+        "experience": experience,
+        "languages": languages,
+        "expected_salary": salary
+    }
+
+    # Добавляем в базу
+    applicants.append(new_applicant)
+
+    print("\n" + "=" * 60)
+    print(f"Соискатель {last_name} {first_name} {patronymic} успешно добавлен!")
+    print(f"Его ID: {new_id}")
+    print("=" * 60)
+
+
+def delete_applicant():
+    """Удаляет соискателя по ID"""
+    if not applicants:
+        print("База данных пуста!")
+        return
+
+    print("\n" + "=" * 60)
+    print("УДАЛЕНИЕ СОИСКАТЕЛЯ")
+    print("=" * 60)
+
+    # Показываем всех соискателей
+    show_all()
+
+    # Запрашиваем ID с проверкой
+    while True:
+        try:
+            id_input = input("\nВведите ID соискателя для удаления (или 0 для отмены): ").strip()
+
+            if id_input == "0":
+                print("Операция отменена.")
+                return
+
+            id_to_delete = int(id_input)
+
+            # Проверяем, что ID положительный
+            if id_to_delete <= 0:
+                print("ID должен быть положительным числом! Попробуйте еще раз.")
+                continue
+
+            # Ищем соискателя
+            found = False
+            for i in range(len(applicants)):
+                if applicants[i]["id"] == id_to_delete:
+                    found = True
+                    break
+
+            if not found:
+                print(f"Соискатель с ID {id_to_delete} не найден! Попробуйте еще раз.")
+                continue
+
+            break
+        except ValueError:
+            print("Ошибка ввода! ID должен быть числом.")
+        except:
+            print("Произошла ошибка. Попробуйте еще раз.")
+
+    # Находим соискателя для отображения информации
+    applicant_to_delete = None
+    for applicant in applicants:
+        if applicant["id"] == id_to_delete:
+            applicant_to_delete = applicant
+            break
+
+    # Подтверждение удаления
+    print(f"\nВы хотите удалить соискателя:")
+    print(f"ID: {applicant_to_delete['id']}")
+    print(
+        f"ФИО: {applicant_to_delete['last_name']} {applicant_to_delete['first_name']} {applicant_to_delete['patronymic']}")
+    print(f"Специальность: {applicant_to_delete['specialty']}")
+
+    while True:
+        confirmation = input("\nВы уверены, что хотите удалить этого соискателя? (да/нет): ").strip().lower()
+
+        if confirmation in ["да", "д", "yes", "y"]:
+            # Удаляем
+            for i in range(len(applicants)):
+                if applicants[i]["id"] == id_to_delete:
+                    deleted = applicants.pop(i)
+                    print(f"\nСоискатель {deleted['last_name']} {deleted['first_name']} удален!")
+                    break
+            break
+        elif confirmation in ["нет", "н", "no", "n"]:
+            print("Удаление отменено.")
+            break
+        else:
+            print("Пожалуйста, введите 'да' или 'нет'.")
+
+
+def edit_applicant():
+    """Редактирует данные существующего соискателя"""
+    if not applicants:
+        print("База данных пуста!")
+        return
+
+    print("\n" + "=" * 60)
+    print("РЕДАКТИРОВАНИЕ ДАННЫХ СОИСКАТЕЛЯ")
+    print("=" * 60)
+
+    # Показываем всех для выбора
+    show_all()
+
+    # Запрашиваем ID с проверкой
+    while True:
+        try:
+            id_input = input("\nВведите ID соискателя для редактирования (или 0 для отмены): ").strip()
+
+            if id_input == "0":
+                print("Редактирование отменено.")
+                return
+
+            id_to_edit = int(id_input)
+
+            # Проверяем, что ID положительный
+            if id_to_edit <= 0:
+                print("ID должен быть положительным числом! Попробуйте еще раз.")
+                continue
+
+            # Ищем соискателя
+            applicant_to_edit = None
+            for applicant in applicants:
+                if applicant["id"] == id_to_edit:
+                    applicant_to_edit = applicant
+                    break
+
+            if not applicant_to_edit:
+                print(f"Соискатель с ID {id_to_edit} не найден! Попробуйте еще раз.")
+                continue
+
+            break
+        except ValueError:
+            print("Ошибка ввода! ID должен быть числом.")
+        except:
+            print("Произошла ошибка. Попробуйте еще раз.")
+
+    # Показываем текущие данные
+    print("\n" + "=" * 60)
+    print(f"ТЕКУЩИЕ ДАННЫЕ СОИСКАТЕЛЯ ID {id_to_edit}:")
+    print("=" * 60)
+    print(f"1. Фамилия: {applicant_to_edit['last_name']}")
+    print(f"2. Имя: {applicant_to_edit['first_name']}")
+    print(f"3. Отчество: {applicant_to_edit['patronymic']}")
+    print(f"4. Пол: {applicant_to_edit['gender']}")
+    print(
+        f"5. Дата рождения: {applicant_to_edit['birth_day']:02d}.{applicant_to_edit['birth_month']:02d}.{applicant_to_edit['birth_year']}")
+    print(f"6. Специальность: {applicant_to_edit['specialty']}")
+    print(f"7. Стаж: {applicant_to_edit['experience']}")
+    print(f"8. Иностранные языки: {applicant_to_edit['languages']}")
+    print(f"9. Ожидаемый оклад: {applicant_to_edit['expected_salary']}")
+    print("0. Отмена редактирования")
+    print("=" * 60)
+
+    # Выбор поля для редактирования
+    while True:
+        try:
+            field_choice = input("\nВыберите поле для редактирования (1-9, 0 - отмена): ").strip()
+
+            if field_choice == "0":
+                print("Редактирование отменено.")
+                return
+
+            if field_choice not in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                print("Неверный выбор! Введите число от 1 до 9 или 0 для отмены.")
+                continue
+
+            break
+        except:
+            print("Ошибка ввода. Попробуйте еще раз.")
+
+    field_choice = int(field_choice)
+
+    # Редактирование выбранного поля
+    if field_choice == 1:  # Фамилия
+        while True:
+            new_value = input(f"Новая фамилия [{applicant_to_edit['last_name']}]: ").strip()
+            if not new_value:
+                new_value = applicant_to_edit['last_name']  # оставляем старое значение
+
+            if not all(c.isalpha() or c == '-' for c in new_value):
+                print("Фамилия должна содержать только буквы и дефисы! Попробуйте еще раз.")
+                continue
+
+            applicant_to_edit['last_name'] = new_value
+            break
+
+    elif field_choice == 2:  # Имя
+        while True:
+            new_value = input(f"Новое имя [{applicant_to_edit['first_name']}]: ").strip()
+            if not new_value:
+                new_value = applicant_to_edit['first_name']
+
+            if not all(c.isalpha() or c == '-' for c in new_value):
+                print("Имя должно содержать только буквы и дефисы! Попробуйте еще раз.")
+                continue
+
+            applicant_to_edit['first_name'] = new_value
+            break
+
+    elif field_choice == 3:  # Отчество
+        while True:
+            new_value = input(f"Новое отчество [{applicant_to_edit['patronymic']}]: ").strip()
+            if not new_value:
+                new_value = applicant_to_edit['patronymic']
+
+            if not all(c.isalpha() or c == '-' for c in new_value):
+                print("Отчество должно содержать только буквы и дефисы! Попробуйте еще раз.")
+                continue
+
+            applicant_to_edit['patronymic'] = new_value
+            break
+
+    elif field_choice == 4:  # Пол
+        while True:
+            new_value = input(f"Пол (М или Ж) [{applicant_to_edit['gender']}]: ").strip().upper()
+            if not new_value:
+                new_value = applicant_to_edit['gender']
+
+            if new_value not in ["М", "Ж"]:
+                print("Пол должен быть 'М' или 'Ж'! Попробуйте еще раз.")
+                continue
+            applicant_to_edit['gender'] = new_value
+            break
+
+    elif field_choice == 5:  # Дата рождения
+        print("\nРедактирование даты рождения (оставьте поле пустым, чтобы не менять):")
+
+        # Год
+        while True:
+            try:
+                new_value = input(f"Год рождения (1900-2024) [{applicant_to_edit['birth_year']}]: ").strip()
+                if new_value:
+                    year = int(new_value)
+                    if year < 1900 or year > 2024:
+                        print("Год должен быть между 1900 и 2024! Попробуйте еще раз.")
+                        continue
+                    applicant_to_edit['birth_year'] = year
+                break
+            except ValueError:
+                if new_value:  # только если ввели что-то
+                    print("Ошибка ввода! Введите число.")
+
+        # Месяц
+        while True:
+            try:
+                new_value = input(f"Месяц рождения (1-12) [{applicant_to_edit['birth_month']}]: ").strip()
+                if new_value:
+                    month = int(new_value)
+                    if month < 1 or month > 12:
+                        print("Месяц должен быть от 1 до 12! Попробуйте еще раз.")
+                        continue
+                    applicant_to_edit['birth_month'] = month
+                break
+            except ValueError:
+                if new_value:
+                    print("Ошибка ввода! Введите число.")
+
+        # День
+        while True:
+            try:
+                new_value = input(f"День рождения (1-31) [{applicant_to_edit['birth_day']}]: ").strip()
+                if new_value:
+                    day = int(new_value)
+                    if day < 1 or day > 31:
+                        print("День должен быть от 1 до 31! Попробуйте еще раз.")
+                        continue
+
+                    # Проверка для февраля (упрощенная)
+                    if applicant_to_edit['birth_month'] == 2 and day > 29:
+                        print("В феврале не может быть больше 29 дней! Попробуйте еще раз.")
+                        continue
+
+                    # Проверка для месяцев с 30 днями
+                    if applicant_to_edit['birth_month'] in [4, 6, 9, 11] and day > 30:
+                        print(
+                            f"В {applicant_to_edit['birth_month']}-м месяце не может быть больше 30 дней! Попробуйте еще раз.")
+                        continue
+
+                    applicant_to_edit['birth_day'] = day
+                break
+            except ValueError:
+                if new_value:
+                    print("Ошибка ввода! Введите число.")
+
+    elif field_choice == 6:  # Специальность
+        while True:
+            new_value = input(f"Специальность [{applicant_to_edit['specialty']}]: ").strip()
+            if not new_value:
+                new_value = applicant_to_edit['specialty']
+
+            if not new_value:
+                print("Специальность не может быть пустой! Попробуйте еще раз.")
+                continue
+            applicant_to_edit['specialty'] = new_value
+            break
+
+    elif field_choice == 7:  # Стаж
+        while True:
+            try:
+                new_value = input(f"Стаж работы (лет, 0-60) [{applicant_to_edit['experience']}]: ").strip()
+                if new_value:
+                    experience = float(new_value)
+                    if experience < 0 or experience > 60:
+                        print("Стаж должен быть в диапазоне 0-60 лет! Попробуйте еще раз.")
+                        continue
+                    applicant_to_edit['experience'] = experience
+                break
+            except ValueError:
+                if new_value:
+                    print("Ошибка ввода! Введите число (можно с дробной частью).")
+
+    elif field_choice == 8:  # Языки
+        new_value = input(
+            f"Иностранные языки (через запятую, Enter если нет) [{applicant_to_edit['languages']}]: ").strip()
+        if not new_value:
+            new_value = applicant_to_edit['languages']
+        if new_value == "":
+            new_value = "-"
+        applicant_to_edit['languages'] = new_value
+
+    elif field_choice == 9:  # Оклад
+        while True:
+            try:
+                new_value = input(
+                    f"Ожидаемый оклад (руб., минимум 10000) [{applicant_to_edit['expected_salary']}]: ").strip()
+                if new_value:
+                    salary = int(new_value)
+                    if salary < 10000:
+                        print("Оклад должен быть не менее 10000 руб.! Попробуйте еще раз.")
+                        continue
+                    applicant_to_edit['expected_salary'] = salary
+                break
+            except ValueError:
+                if new_value:
+                    print("Ошибка ввода! Введите целое число.")
+
+    print("\n" + "=" * 60)
+    print(f"Данные соискателя ID {id_to_edit} успешно обновлены!")
+    print("=" * 60)
+
+
+def main_menu():
+    """Главное меню программы"""
+    print("\n" + "=" * 60)
+    print("КАДРОВОЕ АГЕНТСТВО - ГЛАВНОЕ МЕНЮ")
+    print("=" * 60)
+
+    # Загружаем данные при запуске
+    load_data()
+
+    while True:
+        print("\n" + "=" * 60)
+        print("ВЫБЕРИТЕ ДЕЙСТВИЕ:")
+        print("=" * 60)
+        print("1. Показать всех соискателей")
+        print("2. Отчет 1: Полный список (специальность, фамилия)")
+        print("3. Отчет 2: По специальности (стаж, пол, фамилия)")
+        print("4. Отчет 3: По диапазону оклада (оклад, фамилия)")
+        print("5. Добавить нового соискателя")
+        print("6. Редактировать данные соискателя")
+        print("7. Удалить соискателя")
+        print("8. Сохранить данные")
+        print("0. Выйти из программы")
+        print("=" * 60)
+
+        # Запрашиваем выбор с проверкой
+        while True:
+            choice = input("Ваш выбор (0-8): ").strip()
+
+            if choice == "0":
+                # Перед выходом спрашиваем о сохранении
+                save_choice = input("Сохранить изменения перед выходом? (да/нет): ").lower()
+                if save_choice in ["да", "д", "yes", "y"]:
+                    save_data()
+                print("Спасибо за использование программы! До свидания!")
+                return
+
+            elif choice in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+                break
+            else:
+                print("Неверный выбор! Введите число от 0 до 8.")
+
+        # Выполняем выбранное действие
+        if choice == "1":
+            show_all()
+        elif choice == "2":
+            report_1()
+        elif choice == "3":
+            report_2()
+        elif choice == "4":
+            report_3()
+        elif choice == "5":
+            add_applicant()
+        elif choice == "6":
+            edit_applicant()
+        elif choice == "7":
+            delete_applicant()
+        elif choice == "8":
+            save_data()
+
+        # Пауза перед следующим действием
+        input("\nНажмите Enter, чтобы продолжить...")
+
+
+# Запуск программы
+if __name__ == "__main__":
+    print("Добро пожаловать в программу 'Кадровое агентство'!")
+    main_menu()
