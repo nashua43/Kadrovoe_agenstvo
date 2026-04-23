@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Дробей</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <h1 class="title">Калькулятор Дробей</h1>
+        
+        <!-- Логотип -->
+        <div class="logo">
+            <img src="logo.png" alt="Логотип" class="logo-img">
+            <span class="logo-text">Супер-крутой калькулятор,йоу</span>
+        </div>
+        
+        <!-- Пользовательский ввод данных -->
+        <div class="input-section">
+            <h2>Введите две дроби:</h2>
+            
+            <div class="fractions-container">
+                <!-- Первая дробь -->
+                <div class="fraction-input">
+                    <label>Первая дробь:</label>
+                    <div class="fraction-fields">
+                        <input type="number" id="num1" placeholder="Числитель" class="input-field">
+                        <span class="fraction-line">/</span>
+                        <input type="number" id="den1" placeholder="Знаменатель" class="input-field">
+                    </div>
+                </div>
+                
+                <!-- Вторая дробь -->
+                <div class="fraction-input">
+                    <label>Вторая дробь:</label>
+                    <div class="fraction-fields">
+                        <input type="number" id="num2" placeholder="Числитель" class="input-field">
+                        <span class="fraction-line">/</span>
+                        <input type="number" id="den2" placeholder="Знаменатель" class="input-field">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Кнопки операций -->
+ <div class="buttons-section">
+    <h2>Выберите операцию:</h2>
+    <div class="buttons-container">
+        <!-- Сложить -->
+        <button class="op-button" onclick="calculate('add')" 
+                onmouseenter="swapImage(this, 'images/add-hover.svg')"
+                onmouseleave="swapImage(this, 'images/add-normal.svg')">
+            <img src="images/add-normal.svg" alt="Сложить" class="button-icon">
+            <span>Сложить</span>
+        </button>
+        
+        <!-- Вычесть -->
+        <button class="op-button" onclick="calculate('subtract')"
+                onmouseenter="swapImage(this, 'images/subtract-hover.svg')"
+                onmouseleave="swapImage(this, 'images/subtract-normal.svg')">
+            <img src="images/subtract-normal.svg" alt="Вычесть" class="button-icon">
+            <span>Вычесть</span>
+        </button>
+        
+        <!-- Умножить -->
+        <button class="op-button" onclick="calculate('multiply')"
+                onmouseenter="swapImage(this, 'images/multiply-hover.svg')"
+                onmouseleave="swapImage(this, 'images/multiply-normal.svg')">
+            <img src="images/multiply-normal.svg" alt="Умножить" class="button-icon">
+            <span>Умножить</span>
+        </button>
+        
+        <!-- Разделить -->
+        <button class="op-button" onclick="calculate('divide')"
+                onmouseenter="swapImage(this, 'images/divide-hover.svg')"
+                onmouseleave="swapImage(this, 'images/divide-normal.svg')">
+            <img src="images/divide-normal.svg" alt="Разделить" class="button-icon">
+            <span>Разделить</span>
+        </button>
+    </div>
+</div>
+        
+        <!-- Результат -->
+        <div class="result-section">
+            <h2>Результат:</h2>
+            <p id="result" class="result-text">Здесь появится результат вычислений</p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

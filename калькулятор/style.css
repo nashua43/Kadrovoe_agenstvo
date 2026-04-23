@@ -1,0 +1,211 @@
+/* Общие стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Заголовок */
+.title {
+    text-align: center;
+    color: #333;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Логотип */
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 15px;
+}
+
+.logo-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+}
+
+.logo-text {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #667eea;
+}
+
+/* Секции */
+.input-section,
+.buttons-section,
+.result-section {
+    margin: 30px 0;
+    padding: 25px;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+h2 {
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+/* Контейнер дробей */
+.fractions-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.fraction-input {
+    flex: 1;
+    min-width: 250px;
+}
+
+.fraction-input label {
+    display: block;
+    margin-bottom: 15px;
+    color: #666;
+    font-weight: 600;
+    text-align: center;
+}
+
+.fraction-fields {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.input-field {
+    width: 120px;
+    padding: 15px;
+    font-size: 1.2em;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.fraction-line {
+    font-size: 2em;
+    color: #667eea;
+    font-weight: bold;
+}
+
+/* Кнопки операций */
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.op-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    background: white;
+    border: 3px solid #667eea;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 15px;
+}
+
+.op-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    background: #667eea;
+}
+
+.op-button:hover span {
+    color: white;
+}
+
+.button-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+    transition: transform 0.3s;
+}
+
+.op-button:hover .button-icon {
+    transform: scale(1.1);
+}
+
+.op-button span {
+    font-size: 1em;
+    font-weight: 600;
+    color: #667eea;
+    transition: color 0.3s;
+}
+
+/* Результат */
+.result-text {
+    font-size: 1.8em;
+    text-align: center;
+    color: #333;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    border: 3px dashed #667eea;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .title {
+        font-size: 1.8em;
+    }
+    
+    .input-field {
+        width: 90px;
+        padding: 10px;
+    }
+    
+    .op-button {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .button-icon {
+        width: 50px;
+        height: 50px;
+    }
+}
